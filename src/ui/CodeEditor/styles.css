@@ -1,0 +1,50 @@
+.container {
+  height: 164px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.heading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #424242;
+}
+
+.editorContainer {
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 12px;
+}
+
+.editor {
+  font-size: var(--font-size-14);
+  font-family: var(--font-family-code);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.textboxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.textboxContainerLabel {
+  font-size: 13px;
+  font-weight: normal;
+  color: #424242;
+  margin: 0;
+}

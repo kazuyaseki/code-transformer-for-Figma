@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+}
+
+.heading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #424242;
+}
+
+.editorContainer {
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.editor {
+  font-size: var(--font-size-14);
+  font-family: var(--font-family-code);
+}

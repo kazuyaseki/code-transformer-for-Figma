@@ -1,0 +1,93 @@
+.body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.container {
+  display: flex;
+  background-color: #f2f8fa;
+}
+
+.container > div {
+  /* Graphiql explorer のをもみ消す */
+  width: 50% !important;
+  min-width: 0 !important;
+}
+
+.heading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #424242;
+}
+
+.editorContainer {
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.editor {
+  font-size: var(--font-size-14);
+  font-family: var(--font-family-code);
+}
+
+.query-editor-container {
+  padding: 12px;
+  border-left: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.query-editor {
+  width: 100%;
+  font-size: 13px;
+}
+
+.editing-mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.query-buttons {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.query-buttons > button {
+  border: none;
+  background-color: #fff;
+  color: #424242;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.query-buttons > button.query-selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Graphiql Explorer のスタイルゴリ押しでいじる用 */
+:global(.doc-explorer-title-bar) {
+  display: none;
+}
+:global(#query-MyQuery) + div {
+  display: none !important;
+}
+:global(.graphiql-explorer-actions) {
+  display: none !important;
+}
+:global(.graphiql-explorer-root) {
+  padding: 12px !important;
+}
