@@ -1,0 +1,10 @@
+{
+  "api": "1.0.0",
+  "editorType": [
+    "figma"
+  ],
+  "id": "figma-code-transformer",
+  "name": "figma-code-transformer",
+  "main": "build/main.js",
+  "ui": "build/ui.js"
+}

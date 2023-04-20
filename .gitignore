@@ -1,0 +1,32 @@
+# OS X
+.DS_Store*
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+*~
+
+# npm
+**/node_modules
+*.log
+*.gz
+
+# IntelliJ
+.idea/*
+
+# Coveralls
+coverage
+
+# nodenv local file
+.node-version
+
+# build
+dist
+build/**
+
+.env
