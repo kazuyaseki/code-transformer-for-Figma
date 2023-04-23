@@ -1,3 +1,7 @@
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/kazuyaseki/figma-to-react/graphs/commit-activity)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/kazuyaseki/figma-to-react/pulls)
+[![Tweeting](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=figma-code-transformer%20is%20awesome%20https://github.com/kazuyaseki/figma-code-transformer/)
+
 <p align="center"><img src="docs/heading.png" align="center" alt="Figma Code Transformer logo"></p>
 
 # figma-code-transformer
