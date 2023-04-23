@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/Icon.png" align="center" alt="Figma Code Transformer logo" width="128" height="128"></p>
+<p align="center"><img src="docs/heading.png" align="center" alt="Figma Code Transformer logo"></p>
 
 # figma-code-transformer
 
