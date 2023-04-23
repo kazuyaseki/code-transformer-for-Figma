@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/icon.svg" align="center" alt="Figma to React logo" width="128" height="128"></p>
+<p align="center"><img src="docs/icon.png" align="center" alt="Figma to React logo" width="128" height="128"></p>
 
 # figma-code-transformer
 
