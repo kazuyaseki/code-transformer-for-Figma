@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/icon.svg" align="center" alt="Figma to React logo" width="128" height="128"></p>
+
 # figma-code-transformer
 
 Figma Plugin to generate code using OpenAI API.
