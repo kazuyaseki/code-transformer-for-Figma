@@ -67,7 +67,7 @@ export const Home: React.FC<Props> = ({
     <Tabs
       onChange={onChangeTab}
       options={tabOptions.filter(
-        (option) => !config.useGqlEditor && option.value === 'gql'
+        (option) => !(!config.useGqlEditor && option.value === 'gql')
       )}
       value={tabValue}
     />
