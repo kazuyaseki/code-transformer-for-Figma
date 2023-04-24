@@ -32,7 +32,7 @@
     "@create-figma-plugin/build": "^2.3.0",
     "@create-figma-plugin/tsconfig": "^2.3.0",
     "@figma/plugin-typings": "1.57.1",
-    "@types/jest": "29.5.0",
+    "@types/jest": "29.5.1",
     "@types/node": "^18.15.11",
     "@types/prismjs": "^1.26.0",
     "@types/react": ">=18",
