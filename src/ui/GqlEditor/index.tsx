@@ -13,6 +13,7 @@ import { EditorSvgs } from './EditorSvgs';
 import { mergeQueryAndFragments } from './mergeQueryAndFragments';
 import styles from './styles.css';
 
+// FIXME: add feature to load schema with IntrospectionQuery
 const sdlSchema = `type Tweet {
       id: ID!
       # The tweet text. No more than 140 characters!
@@ -80,7 +81,6 @@ export const GqlEditor = ({
   childFragmentStrings,
 }: Props) => {
   const [schema, setSchema] = useState<GraphQLSchema | null>(graphqlSchemaObj);
-  const [includeChildFragments, setIncludeChildFragments] = useState(true);
 
   const textForViewer = useMemo(() => {
     if (query && query.editingMode === 'fragment') {
@@ -155,19 +155,6 @@ export const GqlEditor = ({
               originalQuery: newQuery,
               editingMode: query?.editingMode || 'query',
             });
-          }}
-          colors={{
-            keyword: 'hsl(var(--color-primary))',
-            def: 'hsl(var(--color-tertiary))',
-            property: 'hsl(var(--color-info))',
-            qualifier: 'hsl(var(--color-secondary))',
-            attribute: 'hsl(var(--color-tertiary))',
-            number: 'hsl(var(--color-success))',
-            string: 'hsl(var(--color-warning))',
-            builtin: 'hsl(var(--color-success))',
-            string2: 'hsl(var(--color-secondary))',
-            variable: 'hsl(var(--color-secondary))',
-            atom: 'hsl(var(--color-tertiary))',
           }}
           arrowOpen={<EditorSvgs.arrowOpen />}
           arrowClosed={<EditorSvgs.arrowClosed />}
