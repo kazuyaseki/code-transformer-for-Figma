@@ -20,6 +20,7 @@ import { PluginToUiMessage, UiToPluginMessage } from './messaging';
 
 import { CodeEditor } from './ui/CodeEditor';
 import { GenerationLoader } from './ui/GenerationLoader';
+import { Home } from './ui/Home';
 import { PromptEditor } from './ui/PromptEditor';
 import { integrateChunkCodes } from './utils/integrateChunkCodes';
 
@@ -154,7 +155,7 @@ function Plugin() {
 
   if (code === null || story === null) {
     return (
-      <PromptEditor
+      <Home
         originalNodeTree={originalNode}
         setPrompt={setPrompt}
         prompt={prompt}
