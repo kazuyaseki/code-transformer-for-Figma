@@ -28,9 +28,9 @@ export const GenerationLoader = () => {
   return (
     <div class={styles.container}>
       <p class={styles.text}>
-        ChatGPT さんが頑張ってコードを生成しています。
+        ChatGPT is generating code. It may take about 40 to 120 seconds
         <br />
-        猫動画でもみながらお待ちください。(およそ40秒ほど)
+        Please watch a cat video while you wait.
       </p>
       <VerticalSpace space="small" />
       <div>
