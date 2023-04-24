@@ -1,9 +1,10 @@
 import '!prismjs/themes/prism.css';
 import { Button, Container, VerticalSpace } from '@create-figma-plugin/ui';
-import { h } from 'preact';
+import { h, Fragment } from 'preact';
 import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-markdown';
 import Editor from 'react-simple-code-editor';
+import { config } from '../../fct.config';
 import { LayerTree } from '../../LayerTree/LayerTree';
 import { OriginalNodeTree } from '../../types';
 import styles from './styles.css';
@@ -42,9 +43,13 @@ export const PromptEditor: React.FC<Props> = ({
         </div>
         <VerticalSpace space="large" />
 
-        {originalNodeTree && <LayerTree originalNodeTree={originalNodeTree} />}
+        {config.useSeparateFileFeature && originalNodeTree && (
+          <>
+            <LayerTree originalNodeTree={originalNodeTree} />
+            <VerticalSpace space="large" />
+          </>
+        )}
 
-        <VerticalSpace space="large" />
         <Button fullWidth onClick={generateCode} style={{ fontSize: '16px' }}>
           Generate Code
         </Button>
