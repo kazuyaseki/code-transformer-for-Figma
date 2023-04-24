@@ -24,6 +24,8 @@ export const useFigmaLayerData = () => {
   const [propsSummaries, setPropsSummaries] = useState<string[]>([]);
 
   const setInitialData = async (pluginMessage: PluginToUiMessage) => {
+    if (pluginMessage.type !== 'sendSelectedNode') return;
+
     const {
       nodeJSON,
       originalNodeTree,

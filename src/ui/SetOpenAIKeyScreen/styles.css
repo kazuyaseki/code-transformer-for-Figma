@@ -1,0 +1,50 @@
+p {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  gap: 20px;
+  align-items: center;
+}
+
+.heading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #424242;
+}
+
+.editorContainer {
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.form {
+  display: flex;
+  gap: 12px;
+}
+
+.texts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alert {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 2px;
+  background-color: #ffc2bd;
+  margin: 0;
+}

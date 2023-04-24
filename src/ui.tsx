@@ -14,6 +14,7 @@ import {
 } from './github/createBranchAndPRWithMultipleFiles';
 import { useFigmaLayerData } from './hooks/useFigmaLayerData';
 import { useGeneratedCode } from './hooks/useGeneratedCode';
+import { useOpenAIKey } from './hooks/useOpenAIKey';
 import { PrInfo, usePrInfo } from './hooks/usePrInfo';
 import { useRepositoryDirectoryNames } from './hooks/useRepositoryDirectoryNames';
 import { PluginToUiMessage, UiToPluginMessage } from './messaging';
@@ -22,9 +23,12 @@ import { CodeEditor } from './ui/CodeEditor';
 import { GenerationLoader } from './ui/GenerationLoader';
 import { Home } from './ui/Home';
 import { PromptEditor } from './ui/PromptEditor';
+import { SetOpenAIKeyScreen } from './ui/SetOpenAIKeyScreen';
 import { integrateChunkCodes } from './utils/integrateChunkCodes';
 
 function Plugin() {
+  const { shouldSetKey, onSetKey } = useOpenAIKey();
+
   const {
     prompt,
     originalNode,
@@ -143,11 +147,17 @@ function Plugin() {
     }) => {
       const pluginMessage = event.data.pluginMessage;
 
-      if (pluginMessage && pluginMessage.type === 'sendSelectedNode') {
+      if (!pluginMessage) return;
+
+      if (pluginMessage.type === 'sendSelectedNode') {
         setInitialData(event.data.pluginMessage);
       }
     };
   }, []);
+
+  if (shouldSetKey) {
+    return <SetOpenAIKeyScreen onSetKey={onSetKey} />;
+  }
 
   if (loading) {
     return <GenerationLoader />;

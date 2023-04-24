@@ -3,13 +3,14 @@ import {
   showUI,
 } from '@create-figma-plugin/utilities';
 import { PLUGIN_WINDOW_HEIGHT_PX, PLUGIN_WINDOW_WIDTH_PX } from './constants';
+import { config } from './fct.config';
 import { buildOriginalLayerTree } from './figmaNode/buildOriginalLayerTree';
 import { buildTagTree } from './figmaNode/buildTagTree';
 import { divideTagTreeToChunks } from './figmaNode/divideTagTreeToChunks';
 import { getChildGqlFraments } from './figmaNode/getChildGqlFraments';
 import { removeUnnecessaryPropsFromTagTree } from './figmaNode/removeUnnecessaryPropsFromTagTree';
 import { PluginToUiMessage, UiToPluginMessage } from './messaging';
-import { GQL_QUERY_KEY } from './storage/keys';
+import { GQL_QUERY_KEY, OPENAI_API_KEY } from './storage/keys';
 import { SavedGqlQuery } from './types';
 
 export default function () {
@@ -41,6 +42,16 @@ export default function () {
 
   showUI({ height: PLUGIN_WINDOW_HEIGHT_PX, width: PLUGIN_WINDOW_WIDTH_PX });
 
+  if (!!config.buildForCommunityPlugin) {
+    figma.clientStorage.getAsync(OPENAI_API_KEY).then((key) => {
+      const msg: PluginToUiMessage = {
+        type: 'get-openai-key',
+        openAiKey: key,
+      };
+      figma.ui.postMessage(msg);
+    });
+  }
+
   const msg: PluginToUiMessage = {
     type: 'sendSelectedNode',
     nodeId: selectedNode.id,
@@ -70,6 +81,18 @@ export default function () {
         node.setPluginData(GQL_QUERY_KEY, JSON.stringify(value));
         figma.notify('Query saved');
       }
+    }
+    if (msg.type === 'save-openai-key') {
+      const { openAiKey } = msg;
+      figma.clientStorage
+        .setAsync(OPENAI_API_KEY, openAiKey)
+        .then(() => {
+          figma.notify('OpenAI key saved');
+        })
+        .catch((e) => {
+          console.error(e);
+          figma.notify('Error while saving OpenAI key', { error: true });
+        });
     }
     if (msg.type === 'error-char-completion') {
       const { error } = msg;
