@@ -22,12 +22,11 @@ import { PluginToUiMessage, UiToPluginMessage } from './messaging';
 import { CodeEditor } from './ui/CodeEditor';
 import { GenerationLoader } from './ui/GenerationLoader';
 import { Home } from './ui/Home';
-import { PromptEditor } from './ui/PromptEditor';
 import { SetOpenAIKeyScreen } from './ui/SetOpenAIKeyScreen';
 import { integrateChunkCodes } from './utils/integrateChunkCodes';
 
 function Plugin() {
-  const { shouldSetKey, onSetKey } = useOpenAIKey();
+  const { key: openAIAPIKey, shouldSetKey, onSetKey } = useOpenAIKey();
 
   const {
     prompt,
@@ -71,9 +70,9 @@ function Plugin() {
 
     try {
       const codes = await Promise.all([
-        createChatCompletion(prompt, []),
+        createChatCompletion(openAIAPIKey, prompt, []),
         ...chunkPrompts.map((chunkPrompt) => {
-          return createChatCompletion(chunkPrompt, []);
+          return createChatCompletion(openAIAPIKey, chunkPrompt, []);
         }),
       ]);
 
@@ -87,14 +86,24 @@ function Plugin() {
 
       const promptForPrInfo =
         buildPromptForSuggestingBranchNameCommitMessagePrTitle(rootCode);
-      const prInfoStr = await createChatCompletion(promptForPrInfo, [], true);
+      const prInfoStr = await createChatCompletion(
+        openAIAPIKey,
+        promptForPrInfo,
+        [],
+        true
+      );
       const prInfo = JSON.parse(prInfoStr) as PrInfo;
 
       const promptForStory = buildPromptForStorybook(
         rootCode,
         prInfo.componentName
       );
-      const story = await createChatCompletion(promptForStory, [], true);
+      const story = await createChatCompletion(
+        openAIAPIKey,
+        promptForStory,
+        [],
+        true
+      );
 
       setLoading(false);
 

@@ -40,6 +40,7 @@ function removeMarkdown(str: string) {
 }
 
 export async function createChatCompletion(
+  openAIAPIKey: string,
   chat: string,
   previousChats: Chat[],
   use35turbo?: boolean
@@ -54,7 +55,7 @@ export async function createChatCompletion(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + String(process.env.OPENAI_API_KEY),
+      Authorization: 'Bearer ' + openAIAPIKey,
     },
     body: JSON.stringify(params_),
   });
