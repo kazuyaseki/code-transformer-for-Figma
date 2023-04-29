@@ -39,7 +39,7 @@ function Plugin() {
     setInitialData,
     setPrompt,
     setGqlQuery,
-  } = useFigmaLayerData();
+  } = useFigmaLayerData(openAIAPIKey);
 
   const [loading, setLoading] = useState(false);
 
