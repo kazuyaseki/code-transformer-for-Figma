@@ -6,11 +6,12 @@ import {
   Textbox,
   VerticalSpace,
 } from '@create-figma-plugin/ui';
-import { h, JSX } from 'preact';
+import { h, JSX, Fragment } from 'preact';
 import { highlight, languages } from 'prismjs';
 import { useState } from 'react';
 import Select from 'react-select';
 import Editor from 'react-simple-code-editor';
+import { config } from '../../fct.config';
 import styles from './styles.css';
 
 type Props = {
@@ -102,73 +103,76 @@ export const CodeEditor: React.FC<Props> = ({
       <VerticalSpace space="small" />
       <Tabs onChange={onChangeTab} options={options} value={tabValue} />
 
-      <VerticalSpace space="large" />
+      {!config.buildForCommunityPlugin && (
+        <>
+          <VerticalSpace space="large" />
+          <form
+            class={styles.form}
+            onSubmit={(e) => {
+              e.preventDefault();
+              generatePR();
+            }}
+          >
+            <div class={styles.formFields}>
+              <TextboxWithLabel
+                label="repository name"
+                onChanged={() => {}}
+                value={'gaudiy-monorepo'}
+                textBoxProps={{ readOnly: true }}
+              />
 
-      <form
-        class={styles.form}
-        onSubmit={(e) => {
-          e.preventDefault();
-          generatePR();
-        }}
-      >
-        <div class={styles.formFields}>
-          <TextboxWithLabel
-            label="repository name"
-            onChanged={() => {}}
-            value={'gaudiy-monorepo'}
-            textBoxProps={{ readOnly: true }}
-          />
+              {directoryNames.length > 0 && (
+                <div class={styles.textboxContainer}>
+                  <h4 class={styles.textboxContainerLabel}>
+                    directory to create files
+                  </h4>
+                  <Select
+                    // @ts-ignore
+                    // see https://github.com/JedWatson/react-select/issues/5032
+                    options={directoryOptions}
+                    value={selectedDirectory}
+                    onChange={(newValue) =>
+                      setSelectedDirectory(newValue as SelectOption)
+                    }
+                    styles={{
+                      menuList: (provided) => ({
+                        ...provided,
+                        zIndex: 9999,
+                      }),
+                      menu: (provided) => ({
+                        ...provided,
+                        zIndex: 9999,
+                      }),
+                    }}
+                  />
+                </div>
+              )}
 
-          {directoryNames.length > 0 && (
-            <div class={styles.textboxContainer}>
-              <h4 class={styles.textboxContainerLabel}>
-                directory to create files
-              </h4>
-              <Select
-                // @ts-ignore
-                // see https://github.com/JedWatson/react-select/issues/5032
-                options={directoryOptions}
-                value={selectedDirectory}
-                onChange={(newValue) =>
-                  setSelectedDirectory(newValue as SelectOption)
-                }
-                styles={{
-                  menuList: (provided) => ({
-                    ...provided,
-                    zIndex: 9999,
-                  }),
-                  menu: (provided) => ({
-                    ...provided,
-                    zIndex: 9999,
-                  }),
-                }}
+              <TextboxWithLabel
+                label="branch name"
+                onChanged={(newValue) => setBranchName(newValue)}
+                value={branchName}
+              />
+
+              <TextboxWithLabel
+                label="commit message"
+                onChanged={(newValue) => setCommitMessage(newValue)}
+                value={commitMessage}
+              />
+
+              <TextboxWithLabel
+                label="pull request title"
+                onChanged={(newValue) => setPrTitle(newValue)}
+                value={prTitle}
               />
             </div>
-          )}
 
-          <TextboxWithLabel
-            label="branch name"
-            onChanged={(newValue) => setBranchName(newValue)}
-            value={branchName}
-          />
-
-          <TextboxWithLabel
-            label="commit message"
-            onChanged={(newValue) => setCommitMessage(newValue)}
-            value={commitMessage}
-          />
-
-          <TextboxWithLabel
-            label="pull request title"
-            onChanged={(newValue) => setPrTitle(newValue)}
-            value={prTitle}
-          />
-        </div>
-
-        <Button fullWidth type="submit" style={{ fontSize: '16px' }}>
-          Create PR
-        </Button>
-      </form>
+            <Button fullWidth type="submit" style={{ fontSize: '16px' }}>
+              Create PR
+            </Button>
+          </form>
+        </>
+      )}
 
       <VerticalSpace space="small" />
     </Container>
