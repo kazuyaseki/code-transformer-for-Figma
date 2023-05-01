@@ -17,6 +17,8 @@ type Props = {
   query: SavedGqlQuery | null;
   setQuery: (query: SavedGqlQuery) => void;
   childFragmentStrings: string[];
+  frontendLibrary: string;
+  onChangeFrontendLibrary: (newValue: string) => void;
 };
 
 type TAB_VALUE = 'Prompt' | 'gql';
@@ -30,6 +32,8 @@ export const Home: React.FC<Props> = ({
   query,
   setQuery,
   childFragmentStrings,
+  frontendLibrary,
+  onChangeFrontendLibrary,
 }) => {
   const [tabValue, setTabValue] = useState<TAB_VALUE>('Prompt');
 
@@ -46,6 +50,8 @@ export const Home: React.FC<Props> = ({
           setPrompt={setPrompt}
           prompt={prompt}
           generateCode={generateCode}
+          frontendLibrary={frontendLibrary}
+          onChangeFrontendLibrary={onChangeFrontendLibrary}
         />
       ),
       value: 'Prompt',

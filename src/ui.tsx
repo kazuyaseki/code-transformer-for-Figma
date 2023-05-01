@@ -39,6 +39,8 @@ function Plugin() {
     setInitialData,
     setPrompt,
     setGqlQuery,
+    frontendLibrary,
+    onChangeFrontendLibrary,
   } = useFigmaLayerData(openAIAPIKey);
 
   const [loading, setLoading] = useState(false);
@@ -183,6 +185,8 @@ function Plugin() {
         query={gqlQuery}
         setQuery={setGqlQuery}
         childFragmentStrings={childFragmentStrings}
+        frontendLibrary={frontendLibrary}
+        onChangeFrontendLibrary={onChangeFrontendLibrary}
       />
     );
   }

@@ -20,3 +20,16 @@
   font-size: var(--font-size-14);
   font-family: var(--font-family-code);
 }
+
+.textboxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.textboxContainerLabel {
+  font-size: 13px;
+  font-weight: normal;
+  color: #424242;
+  margin: 0;
+}

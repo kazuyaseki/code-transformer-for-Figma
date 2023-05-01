@@ -3,10 +3,13 @@ import { getChunkReplaceMarker } from '../utils/integrateChunkCodes';
 export const buildPromptForGeneratingCode = (
   node: string,
   propsSummaries: string[],
-  previousCode?: string
+  previousCode?: string,
+  frontendLibrary?: string
 ) => {
   const nodeStr = node.replaceAll('\\', '');
-  return `Convert this Figma JSON object into React, TypeScript, Tailwind code.
+  return `Convert this Figma JSON object into ${
+    frontendLibrary || 'React, TypeScript, Tailwind'
+  } code.
 
 ## Figma JSON
 ${nodeStr}

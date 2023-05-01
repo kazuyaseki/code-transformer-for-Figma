@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import {
   buildPromptForGeneratingCode,
   buildPromptForGeneratingCodeForChunk,
@@ -9,6 +9,7 @@ import { Tag } from '../figmaNode/buildTagTree';
 import { fetchComponentFileContent } from '../github/fetchComponentFileContent';
 import { PluginToUiMessage } from '../messaging';
 import { OriginalNodeTree, SavedGqlQuery } from '../types';
+import { useDebounce } from '../utils/useDebounce';
 
 export const useFigmaLayerData = (openAIAPIKey: string) => {
   const [prompt, setPrompt] = useState<string>('');
@@ -22,6 +23,30 @@ export const useFigmaLayerData = (openAIAPIKey: string) => {
   );
   const [chunks, setChunks] = useState<Tag[]>([]);
   const [propsSummaries, setPropsSummaries] = useState<string[]>([]);
+  const [frontendLibrary, setFrontendLibrary] = useState('');
+  const debouncedFrontendLibraryName = useDebounce(frontendLibrary, 400);
+
+  useEffect(
+    () => {
+      const nodeJSON = removeIdFromNode(
+        JSON.parse(JSON.stringify(originalNode))
+      );
+
+      setPrompt(
+        buildPromptForGeneratingCode(
+          JSON.stringify(nodeJSON),
+          propsSummaries,
+          undefined,
+          debouncedFrontendLibraryName
+        )
+      );
+    },
+    [debouncedFrontendLibraryName] // Only call effect if debounced search term changes
+  );
+
+  const onChangeFrontendLibrary = (newValue: string) => {
+    setFrontendLibrary(newValue);
+  };
 
   const setInitialData = async (pluginMessage: PluginToUiMessage) => {
     if (pluginMessage.type !== 'sendSelectedNode') return;
@@ -36,11 +61,6 @@ export const useFigmaLayerData = (openAIAPIKey: string) => {
       chunks: _chunks,
     } = pluginMessage;
 
-    console.log(
-      _chunks.map((chunk) =>
-        buildPromptForGeneratingCodeForChunk(JSON.stringify(chunk), [])
-      )
-    );
     setChunks(_chunks);
 
     let _propsSummaries: string[] = [];
@@ -88,9 +108,12 @@ export const useFigmaLayerData = (openAIAPIKey: string) => {
     setGqlQuery(savedGqlQuery);
     setChildFragmentStrings(childFragmentStrings);
 
+    const _nodeJSON = removeIdFromNode(JSON.parse(JSON.stringify(nodeJSON)));
     const prompt = buildPromptForGeneratingCode(
-      JSON.stringify(nodeJSON),
-      propsSummaries
+      JSON.stringify(_nodeJSON),
+      propsSummaries,
+      undefined,
+      frontendLibrary
     );
 
     setPrompt(prompt);
@@ -107,5 +130,21 @@ export const useFigmaLayerData = (openAIAPIKey: string) => {
     setInitialData,
     setPrompt,
     setGqlQuery,
+    frontendLibrary,
+    onChangeFrontendLibrary,
   };
 };
+
+function removeIdFromNode(node: Tag) {
+  if (node === null) return node;
+
+  if ('id' in node) {
+    delete node.id;
+  }
+
+  if ('children' in node) {
+    node.children = node.children.map(removeIdFromNode);
+  }
+
+  return node;
+}

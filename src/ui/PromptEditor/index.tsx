@@ -1,5 +1,10 @@
 import '!prismjs/themes/prism.css';
-import { Button, Container, VerticalSpace } from '@create-figma-plugin/ui';
+import {
+  Button,
+  Container,
+  Textbox,
+  VerticalSpace,
+} from '@create-figma-plugin/ui';
 import { h, Fragment } from 'preact';
 import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-markdown';
@@ -14,6 +19,8 @@ type Props = {
   setPrompt: (prompt: string) => void;
   prompt: string;
   generateCode: () => void;
+  frontendLibrary: string;
+  onChangeFrontendLibrary: (newValue: string) => void;
 };
 
 export const PromptEditor: React.FC<Props> = ({
@@ -21,11 +28,25 @@ export const PromptEditor: React.FC<Props> = ({
   setPrompt,
   prompt,
   generateCode,
+  frontendLibrary,
+  onChangeFrontendLibrary,
 }) => {
   return (
     <div>
       <VerticalSpace space="medium" />
       <Container space="medium">
+        {config.buildForCommunityPlugin && (
+          <>
+            <VerticalSpace space="medium" />
+            <TextboxWithLabel
+              label="Name of frontend library to render(defaults to React, TypeScript, Tailwind)"
+              onChanged={onChangeFrontendLibrary}
+              value={frontendLibrary}
+            />
+            <VerticalSpace space="medium" />
+          </>
+        )}
+
         <div>
           <h3 class={styles.heading}>Prompt</h3>
           <VerticalSpace space="medium" />
@@ -58,3 +79,22 @@ export const PromptEditor: React.FC<Props> = ({
     </div>
   );
 };
+
+function TextboxWithLabel(props: {
+  onChanged: (newValue: string) => void;
+  value: string;
+  label: string;
+  textBoxProps?: Partial<React.ComponentProps<typeof Textbox>>;
+}) {
+  return (
+    <div class={styles.textboxContainer}>
+      <h4 class={styles.textboxContainerLabel}>{props.label}</h4>
+      <Textbox
+        onInput={(e) => props.onChanged(e.currentTarget.value)}
+        value={props.value}
+        variant="border"
+        {...props.textBoxProps}
+      />
+    </div>
+  );
+}
