@@ -8,6 +8,7 @@ import {
   buildPromptForSuggestingBranchNameCommitMessagePrTitle,
 } from './chatGPT/buildPrompt';
 import { createChatCompletion } from './chatGPT/createChatCompletion';
+import { config } from './fct.config';
 import {
   createBranchAndPRWithMultipleFiles,
   openPRInBrowser,
@@ -26,7 +27,12 @@ import { SetOpenAIKeyScreen } from './ui/SetOpenAIKeyScreen';
 import { integrateChunkCodes } from './utils/integrateChunkCodes';
 
 function Plugin() {
-  const { key: openAIAPIKey, shouldSetKey, onSetKey } = useOpenAIKey();
+  const {
+    key: openAIAPIKey,
+    shouldSetKey,
+    onSetKey,
+    restoreAPIKeyFromStorage,
+  } = useOpenAIKey();
 
   const {
     prompt,
@@ -100,6 +106,7 @@ function Plugin() {
         rootCode,
         prInfo.componentName
       );
+
       const story = await createChatCompletion(
         openAIAPIKey,
         promptForStory,
@@ -162,6 +169,14 @@ function Plugin() {
 
       if (pluginMessage.type === 'sendSelectedNode') {
         setInitialData(event.data.pluginMessage);
+      }
+      if (pluginMessage.type === 'get-openai-key') {
+        if (shouldSetKey) {
+          const storedKey = pluginMessage.openAiKey;
+          if (storedKey) {
+            restoreAPIKeyFromStorage(storedKey);
+          }
+        }
       }
     };
   }, []);

@@ -10,27 +10,10 @@ export const useOpenAIKey = () => {
     !!config.buildForCommunityPlugin
   );
 
-  useEffect(() => {
-    onmessage = async (event: {
-      data: {
-        pluginMessage: PluginToUiMessage;
-      };
-    }) => {
-      const pluginMessage = event.data.pluginMessage;
-
-      if (!pluginMessage) return;
-
-      if (pluginMessage.type === 'get-openai-key') {
-        if (shouldSetKey) {
-          const storedKey = pluginMessage.openAiKey;
-          if (storedKey) {
-            setKey(storedKey);
-            setShouldSetKey(false);
-          }
-        }
-      }
-    };
-  }, []);
+  const restoreAPIKeyFromStorage = (storedKey: string) => {
+    setKey(storedKey);
+    setShouldSetKey(false);
+  };
 
   const onSetKey = useCallback((key: string) => {
     const msg: UiToPluginMessage = {
@@ -47,5 +30,6 @@ export const useOpenAIKey = () => {
     key,
     onSetKey,
     shouldSetKey,
+    restoreAPIKeyFromStorage,
   };
 };
