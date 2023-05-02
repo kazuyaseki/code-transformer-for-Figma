@@ -5,7 +5,7 @@ module.exports = function (buildOptions) {
     define: {
       global: 'window',
       process: '{}',
-      'process.env': JSON.stringify(process.env),
+      'process.env': '{}',
     },
   };
 };
