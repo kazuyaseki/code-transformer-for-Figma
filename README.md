@@ -4,15 +4,13 @@
 
 <p align="center"><img src="docs/heading.png" align="center" alt="Figma Code Transformer logo"></p>
 
-# figma-code-transformer
+# code-transformer for Figma
 
 Figma Plugin to generate code using OpenAI API.
 
 NOTE: as of right now, OpenAI API does not seem to generate code in good quality with gpt-3.5-turbo.
 
-
 https://user-images.githubusercontent.com/6080698/234930449-b5b0f3cb-2d82-454c-be57-4dd4f969942f.mp4
-
 
 ## To Develop
 
