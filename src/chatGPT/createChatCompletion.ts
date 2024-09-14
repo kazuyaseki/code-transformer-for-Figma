@@ -40,22 +40,21 @@ function removeMarkdown(str: string) {
 }
 
 export async function createChatCompletion(
+  aoiUrl: string,
   openAIAPIKey: string,
   chat: string,
-  previousChats: Chat[],
-  use35turbo?: boolean
+  previousChats: Chat[]
 ) {
   const DEFAULT_PARAMS = {
-    model: use35turbo ? 'gpt-3.5-turbo' : 'gpt-4',
     messages: [...previousChats, { role: 'user', content: chat }],
     temperature: 0,
   };
   const params_ = { ...DEFAULT_PARAMS };
-  const result = await fetch('https://api.openai.com/v1/chat/completions', {
+  const result = await fetch(aoiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + openAIAPIKey,
+      'api-key': openAIAPIKey
     },
     body: JSON.stringify(params_),
   });

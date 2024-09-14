@@ -26,7 +26,9 @@ import { SetOpenAIKeyScreen } from './ui/SetOpenAIKeyScreen';
 import { integrateChunkCodes } from './utils/integrateChunkCodes';
 
 function Plugin() {
-  const { key: openAIAPIKey, shouldSetKey, onSetKey } = useOpenAIKey();
+  const [aoiUrlCache, setAoiUrlCache] = useState<string>('');
+  const [apikeyCache, setApikeyCache] = useState<string>('');
+  const { aoiUrl, key: openAIAPIKey, shouldSetKey, onSetKey } = useOpenAIKey({url: aoiUrlCache, apikey: apikeyCache});
 
   const {
     prompt,
@@ -39,7 +41,7 @@ function Plugin() {
     setInitialData,
     setPrompt,
     setGqlQuery,
-  } = useFigmaLayerData(openAIAPIKey);
+  } = useFigmaLayerData(aoiUrl, openAIAPIKey);
 
   const [loading, setLoading] = useState(false);
 
@@ -70,9 +72,9 @@ function Plugin() {
 
     try {
       const codes = await Promise.all([
-        createChatCompletion(openAIAPIKey, prompt, []),
+        createChatCompletion(aoiUrl, openAIAPIKey, prompt, []),
         ...chunkPrompts.map((chunkPrompt) => {
-          return createChatCompletion(openAIAPIKey, chunkPrompt, []);
+          return createChatCompletion(aoiUrl, openAIAPIKey, chunkPrompt, []);
         }),
       ]);
 
@@ -87,10 +89,10 @@ function Plugin() {
       const promptForPrInfo =
         buildPromptForSuggestingBranchNameCommitMessagePrTitle(rootCode);
       const prInfoStr = await createChatCompletion(
+        aoiUrl,
         openAIAPIKey,
         promptForPrInfo,
-        [],
-        true
+        []
       );
       const prInfo = JSON.parse(prInfoStr) as PrInfo;
 
@@ -99,10 +101,10 @@ function Plugin() {
         prInfo.componentName
       );
       const story = await createChatCompletion(
+        aoiUrl,
         openAIAPIKey,
         promptForStory,
-        [],
-        true
+        []
       );
 
       setLoading(false);
@@ -122,30 +124,14 @@ function Plugin() {
     }
   };
 
-  const generatePR = async () => {
-    if (!selectedDirectory) return;
-
-    const result = await createBranchAndPRWithMultipleFiles(
-      process.env.REPOSITORY_OWNER || '',
-      process.env.REPOSITORY_NAME || '',
-      branchName,
-      prTitle,
-      commitMessage,
-      [
-        {
-          path: `${selectedDirectory.value}/${componentName}.tsx`,
-          content: code || '',
-        },
-        {
-          path: `${selectedDirectory.value}/${componentName}.stories.tsx`,
-          content: story || '',
-        },
-      ]
-    );
-
-    if (result) {
-      openPRInBrowser(result.data.html_url);
-    }
+  const copyToClipboard = (content: string) => {
+    // copy content to clipboard
+    const textArea = document.createElement('textarea');
+    textArea.value = content;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
   };
 
   useEffect(() => {
@@ -155,11 +141,14 @@ function Plugin() {
       };
     }) => {
       const pluginMessage = event.data.pluginMessage;
-
       if (!pluginMessage) return;
-
       if (pluginMessage.type === 'sendSelectedNode') {
         setInitialData(event.data.pluginMessage);
+      } else if (pluginMessage.type === 'get-openai-key') {
+        const storeAoiUrl = pluginMessage.aoiUrl;
+        const storedKey = pluginMessage.openAiKey;
+        setAoiUrlCache(storeAoiUrl || "");
+        setApikeyCache(storedKey || "");
       }
     };
   }, []);
@@ -194,7 +183,7 @@ function Plugin() {
       story={story}
       setStory={setStory}
       commitMessage={commitMessage}
-      generatePR={generatePR}
+      copyToClipboard={copyToClipboard}
       prTitle={prTitle}
       setCode={setCode}
       setCommitMessage={setCommitMessage}

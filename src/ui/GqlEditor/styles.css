@@ -23,7 +23,7 @@
 }
 
 .editorContainer {
-  max-height: 240px;
+  max-height: 300px;
   overflow: auto;
   border: 1px solid #ccc;
   border-radius: 4px;

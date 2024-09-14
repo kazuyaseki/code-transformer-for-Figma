@@ -24,7 +24,7 @@ type Props = {
   commitMessage: string;
   prTitle: string;
   setPrTitle: (prTitle: string) => void;
-  generatePR: () => void;
+  copyToClipboard: (content: string) => void;
   selectedDirectory: SelectOption | null;
   setSelectedDirectory: (selectedDirectory: SelectOption) => void;
   directoryNames: string[];
@@ -46,7 +46,7 @@ export const CodeEditor: React.FC<Props> = ({
   commitMessage,
   prTitle,
   setPrTitle,
-  generatePR,
+  copyToClipboard,
   selectedDirectory,
   setSelectedDirectory,
   directoryNames,
@@ -108,65 +108,14 @@ export const CodeEditor: React.FC<Props> = ({
         class={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
-          generatePR();
+          const formData = new FormData(e.currentTarget);
+          const text = formData.get('text') as string;
+          copyToClipboard(text);
         }}
       >
-        <div class={styles.formFields}>
-          <TextboxWithLabel
-            label="repository name"
-            onChanged={() => {}}
-            value={'gaudiy-monorepo'}
-            textBoxProps={{ readOnly: true }}
-          />
-
-          {directoryNames.length > 0 && (
-            <div class={styles.textboxContainer}>
-              <h4 class={styles.textboxContainerLabel}>
-                directory to create files
-              </h4>
-              <Select
-                // @ts-ignore
-                // see https://github.com/JedWatson/react-select/issues/5032
-                options={directoryOptions}
-                value={selectedDirectory}
-                onChange={(newValue) =>
-                  setSelectedDirectory(newValue as SelectOption)
-                }
-                styles={{
-                  menuList: (provided) => ({
-                    ...provided,
-                    zIndex: 9999,
-                  }),
-                  menu: (provided) => ({
-                    ...provided,
-                    zIndex: 9999,
-                  }),
-                }}
-              />
-            </div>
-          )}
-
-          <TextboxWithLabel
-            label="branch name"
-            onChanged={(newValue) => setBranchName(newValue)}
-            value={branchName}
-          />
-
-          <TextboxWithLabel
-            label="commit message"
-            onChanged={(newValue) => setCommitMessage(newValue)}
-            value={commitMessage}
-          />
-
-          <TextboxWithLabel
-            label="pull request title"
-            onChanged={(newValue) => setPrTitle(newValue)}
-            value={prTitle}
-          />
-        </div>
 
         <Button fullWidth type="submit" style={{ fontSize: '16px' }}>
-          Create PR
+          Copy to clipboard
         </Button>
       </form>
 

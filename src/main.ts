@@ -43,11 +43,14 @@ export default function () {
   showUI({ height: PLUGIN_WINDOW_HEIGHT_PX, width: PLUGIN_WINDOW_WIDTH_PX });
 
   if (!!config.buildForCommunityPlugin) {
-    figma.clientStorage.getAsync(OPENAI_API_KEY).then((key) => {
+    figma.clientStorage.getAsync(OPENAI_API_KEY).then((savedAPIKey) => {
+      const [url, key] = savedAPIKey.split('|');
       const msg: PluginToUiMessage = {
         type: 'get-openai-key',
+        aoiUrl: url,
         openAiKey: key,
       };
+      console.error(`Send get-openai-key ${url} ${key}`);
       figma.ui.postMessage(msg);
     });
   }
@@ -83,11 +86,11 @@ export default function () {
       }
     }
     if (msg.type === 'save-openai-key') {
-      const { openAiKey } = msg;
+      const { aoiUrl, openAiKey } = msg;
       figma.clientStorage
-        .setAsync(OPENAI_API_KEY, openAiKey)
+        .setAsync(OPENAI_API_KEY, aoiUrl + "|" + openAiKey)
         .then(() => {
-          figma.notify('OpenAI key saved');
+          figma.notify('OpenAI url & key saved');
         })
         .catch((e) => {
           console.error(e);

@@ -16,6 +16,7 @@ export type UiToPluginMessage =
     }
   | {
       type: 'save-openai-key';
+      aoiUrl: string;
       openAiKey: string;
     };
 
@@ -32,5 +33,6 @@ export type PluginToUiMessage =
     }
   | {
       type: 'get-openai-key';
+      aoiUrl: string | null;
       openAiKey: string | null;
     };

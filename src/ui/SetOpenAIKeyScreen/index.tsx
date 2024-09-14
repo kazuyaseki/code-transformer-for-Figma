@@ -4,11 +4,16 @@ import { useState } from 'preact/hooks';
 import styles from './styles.css';
 
 type Props = {
-  onSetKey: (key: string) => void;
+  onSetKey: (url:string, key: string) => void;
 };
 
 export const SetOpenAIKeyScreen = ({ onSetKey }: Props) => {
   const [key, setKey] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
+
+  const onChangeUrl = (event: JSX.TargetedEvent<HTMLInputElement>) => {
+    setUrl(event.currentTarget.value);
+  };
 
   const onChangeKey = (event: JSX.TargetedEvent<HTMLInputElement>) => {
     setKey(event.currentTarget.value);
@@ -16,20 +21,34 @@ export const SetOpenAIKeyScreen = ({ onSetKey }: Props) => {
 
   const onSubmit = async (event: JSX.TargetedEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSetKey(key);
+    onSetKey(url, key);
   };
 
   return (
     <div class={styles.container}>
-      <h1 class={styles.heading}>Set OpenAI API Key</h1>
+      <h1 class={styles.heading}>Set Azure OpenAI URL & API Key</h1>
       <form onSubmit={onSubmit} class={styles.form}>
-        <Textbox
-          onInput={onChangeKey}
-          value={key}
-          variant="border"
-          style={{ width: '320px' }}
-        />
-        <Button type="submit" disabled={key?.length === 0}>
+        <div>
+          Azure OpenAI URL
+          <Textbox
+            name="url"
+            onInput={onChangeUrl}
+            value={url}
+            variant="border"
+            style={{ width: '320px' }}
+          />
+        </div>
+        <div>
+          API Key
+          <Textbox
+            name="key"
+            onInput={onChangeKey}
+            value={key}
+            variant="border"
+            style={{ width: '320px' }}
+          />
+        </div>
+        <Button type="submit" disabled={url?.length === 0 || key?.length === 0}>
           Save
         </Button>
       </form>
@@ -40,9 +59,6 @@ export const SetOpenAIKeyScreen = ({ onSetKey }: Props) => {
             This Plugin is build using code in this repository, and won't use
             the key something malicious👍
           </p>
-          <a href="https://github.com/kazuyaseki/figma-code-transformer">
-            GitHub - figma-code-transformer
-          </a>
         </div>
         <p class={styles.alert}>
           Disclaimer: This plugin may not produce satisfying result without

@@ -10,7 +10,7 @@ import { fetchComponentFileContent } from '../github/fetchComponentFileContent';
 import { PluginToUiMessage } from '../messaging';
 import { OriginalNodeTree, SavedGqlQuery } from '../types';
 
-export const useFigmaLayerData = (openAIAPIKey: string) => {
+export const useFigmaLayerData = (aoiUrl:string, openAIAPIKey: string) => {
   const [prompt, setPrompt] = useState<string>('');
   const [originalNode, setOriginalNodeTree] = useState<OriginalNodeTree | null>(
     null
@@ -76,7 +76,7 @@ export const useFigmaLayerData = (openAIAPIKey: string) => {
             )
           )
           .map((summaryPrompt) =>
-            createChatCompletion(openAIAPIKey, summaryPrompt, [], true)
+            createChatCompletion(aoiUrl, openAIAPIKey, summaryPrompt, [])
           )
       );
 
