@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Figma plugin to generate code using OpenAI API",
   "engines": {
-    "node": "18",
+    "node": ">=18",
     "npm": ">=8.x"
   },
   "dependencies": {
@@ -55,12 +55,13 @@
   },
   "figma-plugin": {
     "editorType": [
-      "figma"
+      "dev"
     ],
     "id": "figma-code-transformer",
     "name": "figma-code-transformer",
     "main": "src/main.ts",
-    "ui": "src/ui.tsx"
+    "ui": "src/ui.tsx",
+    "capabilities":["inspect","vscode"]
   },
   "browser": {
     "fs": false,
