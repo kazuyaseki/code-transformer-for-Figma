@@ -85,7 +85,7 @@ function Plugin() {
           code: codes[index],
         }))
       );
-
+      /*
       const promptForPrInfo =
         buildPromptForSuggestingBranchNameCommitMessagePrTitle(rootCode);
       const prInfoStr = await createChatCompletion(
@@ -106,13 +106,13 @@ function Plugin() {
         promptForStory,
         []
       );
-
+    */
       setLoading(false);
 
       setCode(rootCode);
-      setStory(story);
+      //setStory(story);
 
-      setAll(prInfo);
+      //setAll(prInfo);
     } catch (error: any) {
       console.log(error);
       const msg: UiToPluginMessage = {
@@ -161,7 +161,7 @@ function Plugin() {
     return <GenerationLoader />;
   }
 
-  if (code === null || story === null) {
+  if (code === null) {
     return (
       <Home
         originalNodeTree={originalNode}
@@ -180,7 +180,7 @@ function Plugin() {
     <CodeEditor
       branchName={branchName}
       code={code}
-      story={story}
+      story={story || ""}
       setStory={setStory}
       commitMessage={commitMessage}
       copyToClipboard={copyToClipboard}

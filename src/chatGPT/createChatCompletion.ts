@@ -30,7 +30,9 @@ async function fetchStream(stream: any) {
     });
   const decorder = new TextDecoder();
   const resultString = decorder.decode(chunks);
-
+  console.log(
+    `Received resultString = ${resultString}`
+  );
   const response = JSON.parse(resultString);
   return response;
 }
