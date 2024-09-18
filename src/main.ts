@@ -13,7 +13,7 @@ import { PluginToUiMessage, UiToPluginMessage } from './messaging';
 import { GQL_QUERY_KEY, OPENAI_API_KEY } from './storage/keys';
 import { SavedGqlQuery } from './types';
 
-export default function () {
+export default async function () {
   const selectedNode = getSelectedNodesOrAllNodes()[0];
   const usedComponentNodes: ComponentNode[] = [];
   const savedGqlQueryString = selectedNode.getPluginData(GQL_QUERY_KEY);
@@ -28,7 +28,7 @@ export default function () {
 
   const childFragmentStrings = getChildGqlFraments(selectedNode);
 
-  const thisTagTree = buildTagTree(selectedNode, usedComponentNodes);
+  const thisTagTree = await buildTagTree(selectedNode, usedComponentNodes);
 
   const originalNodeTree = buildOriginalLayerTree(selectedNode);
 
@@ -50,7 +50,6 @@ export default function () {
         aoiUrl: url,
         openAiKey: key,
       };
-      console.error(`Send get-openai-key ${url} ${key}`);
       figma.ui.postMessage(msg);
     });
   }

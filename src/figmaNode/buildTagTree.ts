@@ -1,4 +1,4 @@
-import { CSSData, getCssDataForTag } from './getCssDataForTag';
+import { CSSData, getCssDataForTagNew } from './getCssDataForTag';
 import { isImageNode } from './isImageNode';
 export type UnitType = 'px' | 'rem' | 'remAs10px';
 
@@ -31,10 +31,10 @@ export type Tag =
 
 export type ComponentType = {};
 
-export function buildTagTree(
+export const buildTagTree = async(
   node: SceneNode,
   componentNodes: ComponentNode[]
-): Tag | null {
+): Promise<Tag | null> => {
   if (!node.visible) {
     return null;
   }
@@ -43,40 +43,10 @@ export function buildTagTree(
 
   const childTags: Tag[] = [];
   if ('children' in node && !isImg) {
-    node.children.forEach((child) => {
-      if (child.type === 'INSTANCE') {
-        const props = Object.keys(child.componentProperties).reduce(
-          (_props, key) => {
-            const value = child.componentProperties[
-              key
-            ] as ComponentProperties[string];
-
-            // component property keys are named like this: "color#primary"
-            // thus we need to split the key to get the actual property name
-            const _key = value.type === 'VARIANT' ? key : key.split('#')[0];
-            return { ..._props, [_key]: value.value };
-          },
-          {} as { [property: string]: string | boolean }
-        );
-
-        if ('Instance' in props) {
-          delete props['Instance'];
-        }
-
-        childTags.push({
-          name: child.name.replace(' ', ''),
-          props,
-          isComponent: true,
-          children: [],
-        });
-        if (child.mainComponent) {
-          componentNodes.push(child.mainComponent);
-        }
-      } else {
-        const childTag = buildTagTree(child, componentNodes);
-        if (childTag) {
-          childTags.push(childTag);
-        }
+    node.children.forEach(async (child) => {
+      const childTag = await buildTagTree(child, componentNodes);
+      if (childTag) {
+        childTags.push(childTag);
       }
     });
   }
@@ -84,7 +54,7 @@ export function buildTagTree(
   const tag: Tag = {
     id: node.id,
     name: node.name,
-    css: getCssDataForTag(node),
+    css: await getCssDataForTagNew(node),
     children: childTags,
   };
 
