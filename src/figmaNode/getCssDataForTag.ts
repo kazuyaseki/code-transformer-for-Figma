@@ -51,21 +51,22 @@ const textDecorationCssValues = {
   STRIKETHROUGH: 'line-through',
 };
 
+const regex = /var\([^,]+,\s*([^)]+)\)/;
+
 export const getCssDataForTagNew = async (node: SceneNode): Promise<CSSData> => { 
   try {
     const css = await node.getCSSAsync();
     Object.keys(css).forEach((key) => {
       css[key] = css[key];
-      if (css[key].startsWith('var(')) {
-        css[key] = css[key].replace('var(', '').replace(')', '').split(',')[1].trim();
+      const matches = regex.exec(css[key]);
+      if (matches && matches[1]) {
+        css[key] = matches[1].trim();
       }
      });
-    console.log('CSS:', css);
     return css;
   } catch (error) {
     console.error('Error extracting CSS:', error);
   }
-  console.log('CSS:', "");
   return {};
 }
 

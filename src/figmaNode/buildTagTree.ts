@@ -43,14 +43,15 @@ export const buildTagTree = async(
 
   const childTags: Tag[] = [];
   if ('children' in node && !isImg) {
-    node.children.forEach(async (child) => {
-      const childTag = await buildTagTree(child, componentNodes);
-      if (childTag) {
-        childTags.push(childTag);
-      }
-    });
+    await Promise.all(
+      node.children.map(async (child) => {
+        const childTag = await buildTagTree(child, componentNodes);
+        if (childTag) {
+          childTags.push(childTag);
+        }
+      })
+    );
   }
-
   const tag: Tag = {
     id: node.id,
     name: node.name,

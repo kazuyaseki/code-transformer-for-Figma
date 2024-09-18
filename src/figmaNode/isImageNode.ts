@@ -1,4 +1,7 @@
 export function isImageNode(node: SceneNode): boolean {
+  if (node.isAsset) {
+    return true;
+  }
   if ('children' in node && node.children.length > 0) {
     let hasOnlyVector = true;
     node.children.forEach((child) => {
