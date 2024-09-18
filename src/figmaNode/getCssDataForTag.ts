@@ -58,10 +58,16 @@ export const getCssDataForTagNew = async (node: SceneNode): Promise<CSSData> => 
     const css = await node.getCSSAsync();
     Object.keys(css).forEach((key) => {
       css[key] = css[key];
+      // remove var() and get value inside
       const matches = regex.exec(css[key]);
       if (matches && matches[1]) {
-        css[key] = matches[1].trim();
+        css[key] = matches[1];
       }
+      // remore double quotes in head and tail
+      css[key] = css[key].replace(/^"|"$/g, '');
+      // remove content between /* */, include /* and */
+      css[key] = css[key].replace(/\/\*.*\*\//g, '');
+      css[key] = css[key].trim();
      });
     return css;
   } catch (error) {
