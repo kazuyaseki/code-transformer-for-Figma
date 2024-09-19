@@ -4,12 +4,14 @@ type State = {
   compareHtml: string | null;
   compareCss: string | null;
   comparePrompt: string | null;
+  compareResult: string | null;
 };
 
 const initialState: State = {
     compareHtml: null,
     compareCss: null,
-    comparePrompt: null
+    comparePrompt: null,
+    compareResult: null
 };
 
 type Action =
@@ -24,6 +26,10 @@ type Action =
     | {
         type: 'setComparePrompt';
         comparePrompt: string;
+    }
+    | {
+        type: 'generateResult';
+        compareResult: string;
     };
 
 export const useCompareCode = () => {
@@ -35,6 +41,8 @@ export const useCompareCode = () => {
         return { ...state, compareCss: action.compareCss };
       case 'setComparePrompt':
           return { ...state, comparePrompt: action.comparePrompt };
+      case 'generateResult':
+          return { ...state, compareResult: action.compareResult };
       default:
         return state;
     }
@@ -46,8 +54,10 @@ export const useCompareCode = () => {
     compareHtml: state.compareHtml,
     compareCss: state.compareCss,
     comparePrompt: state.comparePrompt,
+    compareResult: state.compareResult,
     setCompareHtml: (compareHtml: string) => dispatch({ type: 'setCompareHtml', compareHtml }),
     setCompareCss: (compareCss: string) => dispatch({ type: 'setCompareCss', compareCss }),
     setComparePrompt: (comparePrompt: string) => dispatch({ type: 'setComparePrompt', comparePrompt }),
+    generateResult: (compareResult: string) => dispatch({ type: 'generateResult', compareResult }),
   };
 };

@@ -41,7 +41,7 @@ function Plugin() {
   const [showReult, setShowResult] = useState(false);
 
   const { htmlCode, cssCode, setHtml, setCSS } = useGeneratedCode();
-  const { compareHtml, compareCss, comparePrompt, setCompareHtml, setCompareCss, setComparePrompt } = useCompareCode();
+  const { compareHtml, compareCss, comparePrompt, setCompareHtml, setCompareCss, setComparePrompt, generateResult, compareResult } = useCompareCode();
 
   const generateCode = async () => {
     setLoading(true);
@@ -69,35 +69,11 @@ function Plugin() {
       );
       // TODO
       const cssCode = "should return css styles here";
-      /*
-      const promptForPrInfo =
-        buildPromptForSuggestingBranchNameCommitMessagePrTitle(rootCode);
-      const prInfoStr = await createChatCompletion(
-        aoiUrl,
-        openAIAPIKey,
-        promptForPrInfo,
-        []
-      );
-      const prInfo = JSON.parse(prInfoStr) as PrInfo;
-
-      const promptForStory = buildPromptForStorybook(
-        rootCode,
-        prInfo.componentName
-      );
-      const cssCode = await createChatCompletion(
-        aoiUrl,
-        openAIAPIKey,
-        promptForStory,
-        []
-      );
-    */
       setLoading(false);
 
       setHtml(rootCode);
       setCSS(cssCode);
       setShowResult(true)
-
-      //setAll(prInfo);
     } catch (error: any) {
       console.log(error);
       const msg: UiToPluginMessage = {
@@ -111,7 +87,8 @@ function Plugin() {
 
   const compareCode = async () => {
     // TODO
-    console.log("compare results", compareHtml, compareCss);
+    generateResult(compareResult || "compare results");
+    setShowResult(true)
   }
 
   const copyToClipboard = (content: string) => {
@@ -157,6 +134,7 @@ function Plugin() {
     const newValue = event.currentTarget.value as TAB_VALUE;
     setTabValue(newValue);
     setShowResult(false)
+    setLoading(false);
   };
 
   const tabOptions = [
@@ -184,9 +162,11 @@ function Plugin() {
     {
       children: (
         <CompareEditor
+        showReult={showReult}
         htmlCode={compareHtml || ""}
         cssCode={compareCss || ""}
         setCSS={setCompareCss}
+        compareResult={compareResult || ""}
         setHtml={setCompareHtml}
         setPrompt={setComparePrompt}
         prompt={prompt || ""}
