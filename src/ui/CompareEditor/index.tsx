@@ -1,13 +1,10 @@
 import '!prismjs/themes/prism.css';
-import {
-  Button,
-  Container,
-  Textbox,
-  VerticalSpace,
-} from '@create-figma-plugin/ui';
-import { h, JSX } from 'preact';
+import { Button, Container, VerticalSpace } from '@create-figma-plugin/ui';
+import { h, Fragment } from 'preact';
 import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-markdown';
 import Editor from 'react-simple-code-editor';
+import { OriginalNodeTree } from '../../types';
 import styles from './styles.css';
 
 type Props = {
@@ -15,22 +12,22 @@ type Props = {
   htmlCode: string;
   cssCode: string;
   setCSS: (cssCode: string) => void;
+  setPrompt: (prompt: string) => void;
+  prompt: string;
+  compareCode: () => void;
   copyToClipboard: (content: string) => void;
 };
 
-export type SelectOption = {
-  label: string;
-  value: string;
-};
-
-export const CodeEditor: React.FC<Props> = ({
+export const CompareEditor: React.FC<Props> = ({
   setHtml,
   htmlCode,
   cssCode,
   setCSS,
+  setPrompt,
+  prompt,
+  compareCode,
   copyToClipboard
 }) => {
-
   return (
     <div>
       <VerticalSpace space="medium" />
@@ -40,8 +37,8 @@ export const CodeEditor: React.FC<Props> = ({
           <VerticalSpace space="small" />
           <div class={styles.editorContainer}>
             <Editor
-              highlight={function (htmlCode: string) {
-                return highlight(htmlCode, languages.js, 'js');
+              highlight={function (text: string) {
+                return highlight(text, languages.markdown, 'js');
               }}
               onValueChange={setHtml}
               preClassName={styles.editor}
@@ -49,13 +46,6 @@ export const CodeEditor: React.FC<Props> = ({
               value={htmlCode}
             />
           </div>
-          <VerticalSpace space="small" />
-          <Button class={styles.button} fullWidth onClick={(e) => {
-            e.preventDefault();
-            copyToClipboard(htmlCode);
-          }}>
-            Copy to clipboard
-          </Button>
         </div>
         <VerticalSpace space="medium" />
 
@@ -64,8 +54,8 @@ export const CodeEditor: React.FC<Props> = ({
           <VerticalSpace space="small" />
           <div class={styles.editorContainer}>
             <Editor
-              highlight={function (cssCode: string) {
-                return highlight(cssCode, languages.css, 'css');
+              highlight={function (text: string) {
+                return highlight(text, languages.markdown, 'css');
               }}
               onValueChange={setCSS}
               preClassName={styles.editor}
@@ -73,36 +63,31 @@ export const CodeEditor: React.FC<Props> = ({
               value={cssCode}
             />
           </div>
+        </div>
+        <VerticalSpace space="medium" />
+
+        <div>
+          <h3 class={styles.heading}>Prompt</h3>
           <VerticalSpace space="small" />
-          <Button class={styles.button} fullWidth onClick={(e) => {
-            e.preventDefault();
-            copyToClipboard(cssCode);
-          }}>
-            Copy to clipboard
-          </Button>
+          <div class={styles.editorContainer}>
+            <Editor
+              highlight={function (text: string) {
+                return highlight(text, languages.markdown, 'markdown');
+              }}
+              onValueChange={setPrompt}
+              preClassName={styles.editor}
+              textareaClassName={styles.editor}
+              value={prompt}
+            />
+          </div>
         </div>
         <VerticalSpace space="large" />
+
+        <Button class={styles.button} fullWidth onClick={compareCode}>
+          Compare
+        </Button>
       </Container>
       <VerticalSpace space="medium" />
     </div>
   );
 };
-
-function TextboxWithLabel(props: {
-  onChanged: (newValue: string) => void;
-  value: string;
-  label: string;
-  textBoxProps?: Partial<React.ComponentProps<typeof Textbox>>;
-}) {
-  return (
-    <div class={styles.textboxContainer}>
-      <h4 class={styles.textboxContainerLabel}>{props.label}</h4>
-      <Textbox
-        onInput={(e) => props.onChanged(e.currentTarget.value)}
-        value={props.value}
-        variant="border"
-        {...props.textBoxProps}
-      />
-    </div>
-  );
-}

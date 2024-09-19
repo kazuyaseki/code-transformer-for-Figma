@@ -8,8 +8,8 @@ type Props = {
 };
 
 export const SetOpenAIKeyScreen = ({ onSetKey }: Props) => {
-  const [key, setKey] = useState<string>('');
-  const [url, setUrl] = useState<string>('');
+  const [key, setKey] = useState<string>('04f8bf0560f343b5afc2234e29251b99');
+  const [url, setUrl] = useState<string>('https://openaigpt4o2024.openai.azure.com/openai/deployments/gpt4o/chat/completions?api-version=2024-02-15-preview');
 
   const onChangeUrl = (event: JSX.TargetedEvent<HTMLInputElement>) => {
     setUrl(event.currentTarget.value);

@@ -1,32 +1,32 @@
 import { useReducer } from 'preact/hooks';
 
 type State = {
-  code: string | null;
-  story: string | null;
+  htmlCode: string | null;
+  cssCode: string | null;
 };
 
 const initialState: State = {
-  code: null,
-  story: null,
+  htmlCode: null,
+  cssCode: null,
 };
 
 type Action =
   | {
-      type: 'setCode';
-      code: string;
+      type: 'setHtml';
+      htmlCode: string;
     }
   | {
-      type: 'setStory';
-      story: string;
+      type: 'setCSS';
+      cssCode: string;
     };
 
 export const useGeneratedCode = () => {
   const reducer = (state: State, action: Action) => {
     switch (action.type) {
-      case 'setCode':
-        return { ...state, code: action.code };
-      case 'setStory':
-        return { ...state, story: action.story };
+      case 'setHtml':
+        return { ...state, htmlCode: action.htmlCode };
+      case 'setCSS':
+        return { ...state, cssCode: action.cssCode };
       default:
         return state;
     }
@@ -35,9 +35,9 @@ export const useGeneratedCode = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return {
-    code: state.code,
-    story: state.story,
-    setCode: (code: string) => dispatch({ type: 'setCode', code }),
-    setStory: (story: string) => dispatch({ type: 'setStory', story }),
+    htmlCode: state.htmlCode,
+    cssCode: state.cssCode,
+    setHtml: (htmlCode: string) => dispatch({ type: 'setHtml', htmlCode }),
+    setCSS: (cssCode: string) => dispatch({ type: 'setCSS', cssCode }),
   };
 };
