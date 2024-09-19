@@ -17,7 +17,7 @@ import { integrateChunkCodes } from './utils/integrateChunkCodes';
 import { CompareEditor } from './ui/CompareEditor';
 import { PromptHome } from "./ui/PromptEditor/Prompt";
 
-type TAB_VALUE = 'Prompt Home' | 'Compare Home';
+type TAB_VALUE = 'Design to Code' | 'Compare code with design';
 
 function Plugin() {
   const [aoiUrlCache, setAoiUrlCache] = useState<string>('');
@@ -128,7 +128,7 @@ function Plugin() {
     return <GenerationLoader />;
   }
 
-  const [tabValue, setTabValue] = useState<TAB_VALUE>('Prompt Home');
+  const [tabValue, setTabValue] = useState<TAB_VALUE>('Design to Code');
 
   const onChangeTab = (event: JSX.TargetedEvent<HTMLInputElement>) => {
     const newValue = event.currentTarget.value as TAB_VALUE;
@@ -157,23 +157,24 @@ function Plugin() {
           setHtml={setHtml}
         />
       ),
-      value: 'Prompt Home',
+      value: 'Design to Code',
     },
     {
       children: (
         <CompareEditor
-        showReult={showReult}
-        htmlCode={compareHtml || ""}
-        cssCode={compareCss || ""}
-        setCSS={setCompareCss}
-        compareResult={compareResult || ""}
-        setHtml={setCompareHtml}
-        setPrompt={setComparePrompt}
-        prompt={prompt || ""}
-        copyToClipboard={copyToClipboard}
-        compareCode={compareCode}/>
+          showReult={showReult}
+          htmlCode={compareHtml || ""}
+          cssCode={compareCss || ""}
+          setCSS={setCompareCss}
+          compareResult={compareResult || ""}
+          setHtml={setCompareHtml}
+          setPrompt={setComparePrompt}
+          prompt={prompt || ""}
+          copyToClipboard={copyToClipboard}
+          compareCode={compareCode}
+        />
       ),
-      value: 'Compare Home',
+      value: 'Compare code with design',
     },
   ];
 

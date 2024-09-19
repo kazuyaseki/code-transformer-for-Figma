@@ -55,7 +55,6 @@ const regex = /var\([^,]+,\s*([^)]+)\)/;
 
 export const getCssDataForTagNew = async (node: SceneNode): Promise<CSSData> => { 
   try {
-
     const css = await node.getCSSAsync();
     Object.keys(css).forEach((key) => {
       css[key] = css[key];
@@ -68,14 +67,14 @@ export const getCssDataForTagNew = async (node: SceneNode): Promise<CSSData> => 
       css[key] = css[key].replace(/^"|"$/g, '');
       // remove content between /* */, include /* and */
       css[key] = css[key].replace(/\/\*.*\*\//g, '');
+      // replace <path-to-image> with url(), hack code for background-image
+      css[key] = css[key].replace('<path-to-image>', "https://assets.msn.com/weathermapdata/1/static/background/v2.0/jpg/rain_2.jpg");
       css[key] = css[key].trim();
     });
-    if (node.x > 0) {
-      css["left"] = `${node.x}px`;
-    }
-    if (node.y > 0) {
-      css["top"] = `${node.y}px`;
-    }
+
+    css["left"] = `${node.x}px`;
+    css["top"] = `${node.y}px`;
+    
     return css;
   } catch (error) {
     console.error('Error extracting CSS:', error);
