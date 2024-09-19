@@ -17,7 +17,7 @@ import { integrateChunkCodes } from './utils/integrateChunkCodes';
 import { CompareEditor } from './ui/CompareEditor';
 import { PromptHome } from "./ui/PromptEditor/Prompt";
 
-type TAB_VALUE = 'Prompt Home' | 'Compare Home';
+type TAB_VALUE = 'Design to Code' | 'Compare code with design';
 
 function Plugin() {
   const [aoiUrlCache, setAoiUrlCache] = useState<string>('');
@@ -60,15 +60,20 @@ function Plugin() {
         }),
       ]);
 
+      let gptResult = codes[0];
+      const startIndex = gptResult.indexOf('{');
+      gptResult = gptResult.slice(startIndex);
+      const gptCode = JSON.parse(gptResult);
+      
       const rootCode = integrateChunkCodes(
-        codes[0],
+        gptCode['html'] || "",
         chunks.map((chunk, index) => ({
           id: 'id' in chunk ? chunk.id || '' : '',
           code: codes[index],
         }))
       );
       // TODO
-      const cssCode = "should return css styles here";
+      const cssCode = gptCode['css'] || "";
       setLoading(false);
 
       setHtml(rootCode);
@@ -128,7 +133,7 @@ function Plugin() {
     return <GenerationLoader />;
   }
 
-  const [tabValue, setTabValue] = useState<TAB_VALUE>('Prompt Home');
+  const [tabValue, setTabValue] = useState<TAB_VALUE>('Design to Code');
 
   const onChangeTab = (event: JSX.TargetedEvent<HTMLInputElement>) => {
     const newValue = event.currentTarget.value as TAB_VALUE;
@@ -162,18 +167,19 @@ function Plugin() {
     {
       children: (
         <CompareEditor
-        showReult={showReult}
-        htmlCode={compareHtml || ""}
-        cssCode={compareCss || ""}
-        setCSS={setCompareCss}
-        compareResult={compareResult || ""}
-        setHtml={setCompareHtml}
-        setPrompt={setComparePrompt}
-        prompt={prompt || ""}
-        copyToClipboard={copyToClipboard}
-        compareCode={compareCode}/>
+          showReult={showReult}
+          htmlCode={compareHtml || ""}
+          cssCode={compareCss || ""}
+          setCSS={setCompareCss}
+          compareResult={compareResult || ""}
+          setHtml={setCompareHtml}
+          setPrompt={setComparePrompt}
+          prompt={prompt || ""}
+          copyToClipboard={copyToClipboard}
+          compareCode={compareCode}
+        />
       ),
-      value: 'Compare Code',
+      value: 'Compare code with design',
     },
   ];
 
