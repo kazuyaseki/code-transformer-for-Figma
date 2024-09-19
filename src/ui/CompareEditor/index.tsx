@@ -17,6 +17,7 @@ type Props = {
   prompt: string;
   compareCode: () => void;
   copyToClipboard: (content: string) => void;
+  generatePrompt: () => void;
 };
 
 export const CompareEditor: React.FC<Props> = ({
@@ -29,6 +30,7 @@ export const CompareEditor: React.FC<Props> = ({
   setPrompt,
   prompt,
   compareCode,
+  generatePrompt,
   copyToClipboard
 }) => {
 
@@ -92,7 +94,9 @@ export const CompareEditor: React.FC<Props> = ({
             </div>
           </div>
           <VerticalSpace space="medium" />
-
+          <Button class={styles.button} fullWidth onClick={generatePrompt}>
+            Generate Prompt
+          </Button>
           <div>
             <h3 class={styles.heading}>Prompt</h3>
             <VerticalSpace space="small" />
@@ -109,7 +113,6 @@ export const CompareEditor: React.FC<Props> = ({
             </div>
           </div>
           <VerticalSpace space="large" />
-
           <Button class={styles.button} fullWidth onClick={compareCode}>
             Compare
           </Button>

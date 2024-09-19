@@ -90,10 +90,33 @@ function Plugin() {
     }
   };
 
+  const generatePrompt = async () => {
+    setLoading(true);
+    // TODO set comparePrompt
+    // mock logic
+    const start = Date.now();
+    let now = start;
+    while (now - start < 1500) {
+      now = Date.now();
+    }
+    
+    setComparePrompt(comparePrompt || "generate prompt")
+    setLoading(false);
+  }
+
   const compareCode = async () => {
-    // TODO
+    setLoading(true);
+    // TODO set comparePrompt
+    // mock logic
+    const start = Date.now();
+    let now = start;
+    while (now - start < 1100) {
+      now = Date.now();
+    }
+
     generateResult(compareResult || "compare results");
     setShowResult(true)
+    setLoading(false);
   }
 
   const copyToClipboard = (content: string) => {
@@ -174,9 +197,10 @@ function Plugin() {
           compareResult={compareResult || ""}
           setHtml={setCompareHtml}
           setPrompt={setComparePrompt}
-          prompt={prompt || ""}
+          prompt={comparePrompt || ""}
           copyToClipboard={copyToClipboard}
           compareCode={compareCode}
+          generatePrompt={generatePrompt}
         />
       ),
       value: 'Compare code with design',
