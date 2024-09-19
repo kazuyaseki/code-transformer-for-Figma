@@ -22,7 +22,12 @@ export const useFigmaLayerData = (aoiUrl:string, openAIAPIKey: string) => {
   );
   const [chunks, setChunks] = useState<Tag[]>([]);
   const [propsSummaries, setPropsSummaries] = useState<string[]>([]);
-
+  const replacer = (key: any, value: any) => {
+    if (value === null || value === undefined || (Array.isArray(value) && value.length == 0)) {
+      return undefined;
+    }
+    return value;
+  }
   const setInitialData = async (pluginMessage: PluginToUiMessage) => {
     if (pluginMessage.type !== 'sendSelectedNode') return;
 
@@ -89,7 +94,7 @@ export const useFigmaLayerData = (aoiUrl:string, openAIAPIKey: string) => {
     setChildFragmentStrings(childFragmentStrings);
 
     const prompt = buildPromptForGeneratingCode(
-      JSON.stringify(nodeJSON),
+      JSON.stringify(nodeJSON, replacer),
       propsSummaries
     );
 
