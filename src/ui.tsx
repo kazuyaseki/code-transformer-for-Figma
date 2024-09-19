@@ -157,7 +157,7 @@ function Plugin() {
           setHtml={setHtml}
         />
       ),
-      value: 'Prompt Home',
+      value: 'Design to Code',
     },
     {
       children: (
@@ -173,7 +173,7 @@ function Plugin() {
         copyToClipboard={copyToClipboard}
         compareCode={compareCode}/>
       ),
-      value: 'Compare Home',
+      value: 'Compare Code',
     },
   ];
 
