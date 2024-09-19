@@ -60,15 +60,20 @@ function Plugin() {
         }),
       ]);
 
+      let gptResult = codes[0];
+      const startIndex = gptResult.indexOf('{');
+      gptResult = gptResult.slice(startIndex);
+      const gptCode = JSON.parse(gptResult);
+      
       const rootCode = integrateChunkCodes(
-        codes[0],
+        gptCode['html'] || "",
         chunks.map((chunk, index) => ({
           id: 'id' in chunk ? chunk.id || '' : '',
           code: codes[index],
         }))
       );
       // TODO
-      const cssCode = "should return css styles here";
+      const cssCode = gptCode['css'] || "";
       setLoading(false);
 
       setHtml(rootCode);
