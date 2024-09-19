@@ -67,5 +67,12 @@ export const buildTagTree = async(
     tag.isImg = true;
   }
 
+  if (tag.css.display == "flex" || tag.css.display == "grid" || tag.css.display == "inline-flex" || tag.css.display == "inline-grid") { 
+    tag.children.map((child) => { 
+      delete (child as any).css.top;
+      delete (child as any).css.left;
+    });
+  }
+
   return tag;
 }

@@ -55,6 +55,7 @@ const regex = /var\([^,]+,\s*([^)]+)\)/;
 
 export const getCssDataForTagNew = async (node: SceneNode): Promise<CSSData> => { 
   try {
+
     const css = await node.getCSSAsync();
     Object.keys(css).forEach((key) => {
       css[key] = css[key];
@@ -68,7 +69,13 @@ export const getCssDataForTagNew = async (node: SceneNode): Promise<CSSData> => 
       // remove content between /* */, include /* and */
       css[key] = css[key].replace(/\/\*.*\*\//g, '');
       css[key] = css[key].trim();
-     });
+    });
+    if (node.x > 0) {
+      css["left"] = `${node.x}px`;
+    }
+    if (node.y > 0) {
+      css["top"] = `${node.y}px`;
+    }
     return css;
   } catch (error) {
     console.error('Error extracting CSS:', error);
