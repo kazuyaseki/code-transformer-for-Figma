@@ -6,7 +6,9 @@ export const buildPromptForGeneratingCode = (
   previousCode?: string
 ) => {
   const nodeStr = node.replaceAll('\\', '');
-  return `Convert this Figma JSON object into React, TypeScript, Tailwind code.
+  return `You are a frontent engineer. Convert this Figma JSON object into Web Component, TypeScript code, only output css and html template as 2 parts
+
+Output use json format, use "html" and "css" as key
 
 ## Figma JSON
 ${nodeStr}
@@ -26,20 +28,23 @@ ${previousCode}
 }
 
 ## constraints
-- component does not take any props
-- do not omit any details in JSX
 - Do not write anything besides code
-- import components from @/components directory
-- if string value other than hex or rgb() format is specified for color property, it is design token vairable. it is defined with the name in kebab-case in tailwind.config.js
-- if "typography" property is specified, it is defined in tailwind config as typography token that has multiple properties such as font-family, font-size, font-weight, line-height
-- if a layer contains more than 1 same name child layers, define it with ul tag and create array of appropriate dummy data within React component and use map method to render in JSX
-- use export rather than default export
-- if Props summaries are provided for the components used in JSON, write props that are required in code props and omit props that only exist in Figma JSON
-- if child is chunk, render it as ${getChunkReplaceMarker(
-    'nodeId of chunk'
-  )}, it will later be used to replace with another code
-- if there are components without Props summaries, just write as <ComponentName /> with properties in Figma variant
-${previousCode ? '- do not change previous code' : ''}`;
+- Do not add <style> in html output
+- Do not add javascript code in html output
+
+## html constraints
+- try to avoid write styles in template
+- component does not take any props
+- make sure the HTML output matches the Figma JSON structure
+
+## css constraints
+- Avoid use same classname for different component
+- Do not change or drop any CSS style values that exist in the JSON.
+- If element exist isImg set true, set the element to img with width and height from figma json, don't set src or alt for this img element
+- If CSS has a padding value, set the box-sizing to border-box.
+- if css contains top, left, right, bottom props, set position to absolute
+- if css contains top, left, right, bottom props, set parrent css position to relative
+- set outermost layer postion to relative`;
 };
 
 export const buildPromptForGeneratingCodeForChunk = (

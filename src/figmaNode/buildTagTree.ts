@@ -42,7 +42,10 @@ export const buildTagTree = async(
   const isImg = isImageNode(node);
 
   const childTags: Tag[] = [];
+  const childTagName: string[] = [];
+
   if ('children' in node && !isImg) {
+    node.children.forEach((child) => {childTagName.push(child.name)});
     await Promise.all(
       node.children.map(async (child) => {
         const childTag = await buildTagTree(child, componentNodes);
@@ -52,11 +55,21 @@ export const buildTagTree = async(
       })
     );
   }
+  
+  const childTagsOrdered: Tag[] = [];
+  childTagName.forEach((name) => {
+    childTags.forEach((child) => {
+      if ('name' in child && child.name === name) {
+        childTagsOrdered.push(child);
+      }
+    });
+  });
+  
   const tag: Tag = {
     id: node.id,
     name: node.name,
     css: await getCssDataForTagNew(node),
-    children: childTags,
+    children: childTagsOrdered,
   };
 
   if (node.type === 'TEXT') {
