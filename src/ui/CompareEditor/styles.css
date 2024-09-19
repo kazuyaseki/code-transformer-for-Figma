@@ -2,6 +2,20 @@
   display: flex;
 }
 
+.mask {
+  background: #FFFFFF;
+  padding: 20px;
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(223, 219, 219, 0.5);
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.content {
+  padding: 0 14px;
+}
+
 .button {
   font-size: 16px;
   cursor: pointer;
@@ -12,7 +26,7 @@
 }
 
 .heading {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
   color: #424242;
 }

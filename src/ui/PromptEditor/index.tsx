@@ -50,7 +50,7 @@ export const PromptEditor: React.FC<Props> = ({
           </>
         )}
 
-        <Button fullWidth onClick={generateCode} style={{ fontSize: '16px' }}>
+        <Button class={styles.button} fullWidth onClick={generateCode}>
           Generate Code
         </Button>
       </Container>

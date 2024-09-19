@@ -1,29 +1,23 @@
 import { render } from '@create-figma-plugin/ui';
-import { h } from 'preact';
+import { h, JSX } from 'preact';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
-import {
-  buildPromptForGeneratingCodeForChunk,
-  buildPromptForStorybook,
-  buildPromptForSuggestingBranchNameCommitMessagePrTitle,
-} from './chatGPT/buildPrompt';
+import { Tabs } from '@create-figma-plugin/ui';
+import { buildPromptForGeneratingCodeForChunk } from './chatGPT/buildPrompt';
 import { createChatCompletion } from './chatGPT/createChatCompletion';
-import {
-  createBranchAndPRWithMultipleFiles,
-  openPRInBrowser,
-} from './github/createBranchAndPRWithMultipleFiles';
 import { useFigmaLayerData } from './hooks/useFigmaLayerData';
 import { useGeneratedCode } from './hooks/useGeneratedCode';
+import { useCompareCode } from './hooks/useCompareCode';
 import { useOpenAIKey } from './hooks/useOpenAIKey';
-import { PrInfo, usePrInfo } from './hooks/usePrInfo';
-import { useRepositoryDirectoryNames } from './hooks/useRepositoryDirectoryNames';
 import { PluginToUiMessage, UiToPluginMessage } from './messaging';
 
-import { CodeEditor } from './ui/CodeEditor';
 import { GenerationLoader } from './ui/GenerationLoader';
-import { Home } from './ui/Home';
 import { SetOpenAIKeyScreen } from './ui/SetOpenAIKeyScreen';
 import { integrateChunkCodes } from './utils/integrateChunkCodes';
+import { CompareEditor } from './ui/CompareEditor';
+import { PromptHome } from "./ui/PromptEditor/Prompt";
+
+type TAB_VALUE = 'Prompt Home' | 'Compare Home';
 
 function Plugin() {
   const [aoiUrlCache, setAoiUrlCache] = useState<string>('');
@@ -44,22 +38,10 @@ function Plugin() {
   } = useFigmaLayerData(aoiUrl, openAIAPIKey);
 
   const [loading, setLoading] = useState(false);
+  const [showReult, setShowResult] = useState(false);
 
-  const { code, story, setCode, setStory } = useGeneratedCode();
-  const {
-    branchName,
-    commitMessage,
-    prTitle,
-    componentName,
-    selectedDirectory,
-    setAll,
-    setBranchName,
-    setCommitMessage,
-    setPrTitle,
-    setSelectedDirectory,
-  } = usePrInfo();
-
-  const { directoryNames } = useRepositoryDirectoryNames();
+  const { htmlCode, cssCode, setHtml, setCSS } = useGeneratedCode();
+  const { compareHtml, compareCss, comparePrompt, setCompareHtml, setCompareCss, setComparePrompt, generateResult, compareResult } = useCompareCode();
 
   const generateCode = async () => {
     setLoading(true);
@@ -85,34 +67,13 @@ function Plugin() {
           code: codes[index],
         }))
       );
-      /*
-      const promptForPrInfo =
-        buildPromptForSuggestingBranchNameCommitMessagePrTitle(rootCode);
-      const prInfoStr = await createChatCompletion(
-        aoiUrl,
-        openAIAPIKey,
-        promptForPrInfo,
-        []
-      );
-      const prInfo = JSON.parse(prInfoStr) as PrInfo;
-
-      const promptForStory = buildPromptForStorybook(
-        rootCode,
-        prInfo.componentName
-      );
-      const story = await createChatCompletion(
-        aoiUrl,
-        openAIAPIKey,
-        promptForStory,
-        []
-      );
-    */
+      // TODO
+      const cssCode = "should return css styles here";
       setLoading(false);
 
-      setCode(rootCode);
-      //setStory(story);
-
-      //setAll(prInfo);
+      setHtml(rootCode);
+      setCSS(cssCode);
+      setShowResult(true)
     } catch (error: any) {
       console.log(error);
       const msg: UiToPluginMessage = {
@@ -123,6 +84,12 @@ function Plugin() {
       setLoading(false);
     }
   };
+
+  const compareCode = async () => {
+    // TODO
+    generateResult(compareResult || "compare results");
+    setShowResult(true)
+  }
 
   const copyToClipboard = (content: string) => {
     // copy content to clipboard
@@ -161,38 +128,63 @@ function Plugin() {
     return <GenerationLoader />;
   }
 
-  if (code === null) {
-    return (
-      <Home
-        originalNodeTree={originalNode}
-        setPrompt={setPrompt}
-        prompt={prompt}
-        generateCode={generateCode}
-        nodeId={nodeId}
-        query={gqlQuery}
-        setQuery={setGqlQuery}
-        childFragmentStrings={childFragmentStrings}
-      />
-    );
-  }
+  const [tabValue, setTabValue] = useState<TAB_VALUE>('Prompt Home');
+
+  const onChangeTab = (event: JSX.TargetedEvent<HTMLInputElement>) => {
+    const newValue = event.currentTarget.value as TAB_VALUE;
+    setTabValue(newValue);
+    setShowResult(false)
+    setLoading(false);
+  };
+
+  const tabOptions = [
+    {
+      children: (
+        <PromptHome
+          nodeId={nodeId}
+          query={gqlQuery}
+          showReult={showReult}
+          setQuery={setGqlQuery}
+          childFragmentStrings={childFragmentStrings}
+          originalNodeTree={originalNode}
+          setPrompt={setPrompt}
+          prompt={prompt}
+          copyToClipboard={copyToClipboard}
+          generateCode={generateCode}
+          htmlCode={htmlCode || ""}
+          cssCode={cssCode || ""}
+          setCSS={setCSS}
+          setHtml={setHtml}
+        />
+      ),
+      value: 'Prompt Home',
+    },
+    {
+      children: (
+        <CompareEditor
+        showReult={showReult}
+        htmlCode={compareHtml || ""}
+        cssCode={compareCss || ""}
+        setCSS={setCompareCss}
+        compareResult={compareResult || ""}
+        setHtml={setCompareHtml}
+        setPrompt={setComparePrompt}
+        prompt={prompt || ""}
+        copyToClipboard={copyToClipboard}
+        compareCode={compareCode}/>
+      ),
+      value: 'Compare Home',
+    },
+  ];
 
   return (
-    <CodeEditor
-      branchName={branchName}
-      code={code}
-      story={story || ""}
-      setStory={setStory}
-      commitMessage={commitMessage}
-      copyToClipboard={copyToClipboard}
-      prTitle={prTitle}
-      setCode={setCode}
-      setCommitMessage={setCommitMessage}
-      setPrTitle={setPrTitle}
-      setBranchName={setBranchName}
-      selectedDirectory={selectedDirectory}
-      setSelectedDirectory={setSelectedDirectory}
-      directoryNames={directoryNames}
-    />
+    <div>
+      <Tabs
+        onChange={onChangeTab}
+        options={tabOptions}
+        value={tabValue}
+      />
+    </div>
   );
 }
 

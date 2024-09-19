@@ -4,6 +4,15 @@
   white-space: pre-wrap;
 }
 
+.button {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.button div {
+  cursor: pointer !important;
+}
+
 .heading {
   font-size: 18px;
   font-weight: bold;
@@ -14,8 +23,7 @@
   max-height: 300px;
   overflow: auto;
   border: 1px solid #ccc;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
+  border-radius: 4px;
   padding: 12px;
 }
 

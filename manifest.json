@@ -1,1 +1,14 @@
-{"api":"1.0.0","editorType":["dev"],"id":"figma-code-transformer","name":"figma-code-transformer","main":"build/main.js","ui":"build/ui.js","capabilities":["inspect","vscode"]}
+{
+  "api": "1.0.0",
+  "editorType": [
+    "dev"
+  ],
+  "id": "figma-code-transformer",
+  "name": "figma-code-transformer",
+  "main": "build/main.js",
+  "ui": "build/ui.js",
+  "capabilities": [
+    "inspect",
+    "vscode"
+  ]
+}
