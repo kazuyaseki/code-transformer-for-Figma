@@ -150,3 +150,23 @@ ${codeString}
 - write list of props with TS type
 `;
 };
+
+export const buildPromptForComparingCode = (
+  node: string,
+  html: string,
+  css: string
+) => {
+  const nodeStr = node.replaceAll('\\', '');
+  return `Validate if HTML and CSS is align with FIGMA JSON.
+## HTML
+${html}
+## CSS
+${css}
+## Figma JSON
+${nodeStr}
+
+## constraints
+- validate width, height, color, size as basic styles
+- validate relative position, including left, top distance to root class except root class.
+- show result for each class, list properties match figma but no need to show value, list properties mismatch figma and the mismatch values`;
+};
