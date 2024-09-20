@@ -41,7 +41,7 @@ function Plugin() {
   const [showReult, setShowResult] = useState(false);
 
   const { htmlCode, cssCode, setHtml, setCSS } = useGeneratedCode();
-  const { compareHtml, compareCss, comparePrompt, setCompareHtml, setCompareCss, setComparePrompt, generateResult, compareResult } = useCompareCode();
+  const { compareHtml, compareCss, comparePrompt, setCompareHtml, setCompareCss, setComparePrompt, generateResult, compareResult, initJsonData, initPromptData, figmaJson } = useCompareCode();
 
   const generateCode = async () => {
     setLoading(true);
@@ -91,32 +91,25 @@ function Plugin() {
   };
 
   const generatePrompt = async () => {
-    setLoading(true);
-    // TODO set comparePrompt
-    // mock logic
-    const start = Date.now();
-    let now = start;
-    while (now - start < 1500) {
-      now = Date.now();
-    }
-    
+    initPromptData(figmaJson);
     setComparePrompt(comparePrompt || "generate prompt")
     setLoading(false);
   }
 
   const compareCode = async () => {
-    setLoading(true);
-    // TODO set comparePrompt
-    // mock logic
-    const start = Date.now();
-    let now = start;
-    while (now - start < 1100) {
-      now = Date.now();
+    try {
+      const codes = await createChatCompletion(aoiUrl, openAIAPIKey, comparePrompt, []);
+      generateResult(codes || "compare results");
+      setLoading(false);
+      setShowResult(true)
+    } catch (error: any) {
+      const msg: UiToPluginMessage = {
+        type: 'error-char-completion',
+        error,
+      };
+      parent.postMessage({ pluginMessage: msg }, '*');
+      setLoading(false);
     }
-
-    generateResult(compareResult || "compare results");
-    setShowResult(true)
-    setLoading(false);
   }
 
   const copyToClipboard = (content: string) => {
@@ -139,6 +132,7 @@ function Plugin() {
       if (!pluginMessage) return;
       if (pluginMessage.type === 'sendSelectedNode') {
         setInitialData(event.data.pluginMessage);
+        initJsonData(event.data.pluginMessage);
       } else if (pluginMessage.type === 'get-openai-key') {
         const storeAoiUrl = pluginMessage.aoiUrl;
         const storedKey = pluginMessage.openAiKey;
