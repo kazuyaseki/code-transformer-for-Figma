@@ -97,11 +97,12 @@ function Plugin() {
   }
 
   const compareCode = async () => {
+    setLoading(true);
     try {
       const codes = await createChatCompletion(aoiUrl, openAIAPIKey, comparePrompt, []);
       generateResult(codes || "compare results");
-      setLoading(false);
       setShowResult(true)
+      setLoading(false);
     } catch (error: any) {
       const msg: UiToPluginMessage = {
         type: 'error-char-completion',
