@@ -9,6 +9,7 @@ import { h, JSX } from 'preact';
 import { highlight, languages } from 'prismjs';
 import Editor from 'react-simple-code-editor';
 import styles from './styles.css';
+import MockHtmlRes from '../MockHtmlRes/MockHtmlRes';
 
 type Props = {
   setHtml: (htmlCode: string) => void;
@@ -30,7 +31,6 @@ export const CodeEditor: React.FC<Props> = ({
   setCSS,
   copyToClipboard
 }) => {
-
   return (
     <div>
       <VerticalSpace space="medium" />
@@ -84,6 +84,9 @@ export const CodeEditor: React.FC<Props> = ({
         <VerticalSpace space="large" />
       </Container>
       <VerticalSpace space="medium" />
+      <h3 class={styles.heading}>Check your UX</h3>
+      <VerticalSpace space="medium" />
+      <MockHtmlRes htmlString={htmlCode} cssString={cssCode} />
     </div>
   );
 };
