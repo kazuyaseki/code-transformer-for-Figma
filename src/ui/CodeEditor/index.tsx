@@ -41,7 +41,7 @@ export const CodeEditor: React.FC<Props> = ({
           <div class={styles.editorContainer}>
             <Editor
               highlight={function (htmlCode: string) {
-                return highlight(htmlCode, languages.js, 'js');
+                return highlight(htmlCode, languages.html, 'html');
               }}
               onValueChange={setHtml}
               preClassName={styles.editor}
@@ -90,22 +90,3 @@ export const CodeEditor: React.FC<Props> = ({
     </div>
   );
 };
-
-function TextboxWithLabel(props: {
-  onChanged: (newValue: string) => void;
-  value: string;
-  label: string;
-  textBoxProps?: Partial<React.ComponentProps<typeof Textbox>>;
-}) {
-  return (
-    <div class={styles.textboxContainer}>
-      <h4 class={styles.textboxContainerLabel}>{props.label}</h4>
-      <Textbox
-        onInput={(e) => props.onChanged(e.currentTarget.value)}
-        value={props.value}
-        variant="border"
-        {...props.textBoxProps}
-      />
-    </div>
-  );
-}

@@ -44,7 +44,7 @@ export const CompareEditor: React.FC<Props> = ({
           <div class={styles.editorContainer}>
             <Editor
               highlight={function (text: string) {
-                return highlight(text, languages.markdown, 'js');
+                return highlight(text, languages.plaintext, 'plaintext');
               }}
               onValueChange={() => {}}
               preClassName={styles.editor}
@@ -68,7 +68,7 @@ export const CompareEditor: React.FC<Props> = ({
             <div class={styles.editorContainer}>
               <Editor
                 highlight={function (text: string) {
-                  return highlight(text, languages.markdown, 'js');
+                  return highlight(text, languages.html, 'html');
                 }}
                 onValueChange={setHtml}
                 preClassName={styles.editor}
@@ -84,7 +84,7 @@ export const CompareEditor: React.FC<Props> = ({
             <div class={styles.editorContainer}>
               <Editor
                 highlight={function (text: string) {
-                  return highlight(text, languages.markdown, 'css');
+                  return highlight(text, languages.css, 'css');
                 }}
                 onValueChange={setCSS}
                 preClassName={styles.editor}
@@ -103,7 +103,7 @@ export const CompareEditor: React.FC<Props> = ({
             <div class={styles.editorContainer}>
               <Editor
                 highlight={function (text: string) {
-                  return highlight(text, languages.markdown, 'markdown');
+                  return highlight(text, languages.plaintext, 'plaintext');
                 }}
                 onValueChange={setPrompt}
                 preClassName={styles.editor}

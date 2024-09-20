@@ -32,7 +32,7 @@ export const PromptEditor: React.FC<Props> = ({
           <div class={styles.editorContainer}>
             <Editor
               highlight={function (text: string) {
-                return highlight(text, languages.markdown, 'markdown');
+                return highlight(text, languages.plaintext, 'plaintext');
               }}
               onValueChange={setPrompt}
               preClassName={styles.editor}
