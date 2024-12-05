@@ -115,7 +115,7 @@ export const CodeEditor: React.FC<Props> = ({
           <TextboxWithLabel
             label="repository name"
             onChanged={() => {}}
-            value={'gaudiy-monorepo'}
+            value=''
             textBoxProps={{ readOnly: true }}
           />
 
