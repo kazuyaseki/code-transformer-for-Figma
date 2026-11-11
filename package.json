@@ -18,7 +18,7 @@
     "graphiql-explorer": "^0.9.0",
     "graphql": "^16.6.0",
     "js-base64": "^3.7.5",
-    "langchain": "^0.0.44",
+    "langchain": "^0.3.0",
     "module": "^1.2.5",
     "openai": "^3.2.1",
     "preact": ">=10",
